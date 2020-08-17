@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conteudo;
 use Illuminate\Http\Request;
 
 class ConteudoController extends Controller
@@ -35,17 +36,13 @@ class ConteudoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['data_link'] = date('d/m/Y H:i:s');
         $user = $request->user();
-               
-        $user->conteudos()->create([
-            'titulo' => 'Titulo de teste',
-            'texto' => 'Vai aki um texto',
-            'image' => '01010',
-            'link' => 'gtyyg/fewef/wq',
-            'data_link' => now(),
-            'data' => now()
-        ]);
-        return ($user->conteudos);
+        $data['user_id'] = $user->id;
+        //$conteudo = Conteudo::create($data);
+        $user->conteudos()->create($data);
+
+        return ['status' => true, 'conteudo' => $user->conteudos];
     }
 
     /**
