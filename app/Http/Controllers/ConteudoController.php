@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Conteudo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ConteudoController extends Controller
 {
@@ -14,7 +15,8 @@ class ConteudoController extends Controller
      */
     public function index()
     {
-        //
+        $conteudos = Conteudo::with('user')->orderBy('data_link','DESC')->paginate(5);
+        return ['status' => true, 'conteudos' => $conteudos];
     }
 
     /**
@@ -39,10 +41,22 @@ class ConteudoController extends Controller
         $data['data_link'] = date('d/m/Y H:i:s');
         $user = $request->user();
         $data['user_id'] = $user->id;
+
+        $validacao = Validator::make($data, [
+            'titulo' =>  'required',
+            'texto' => 'required',            
+        ]);
+
+        if($validacao->fails()){
+            return ['status'=> false, 'validacao' => true, 'erros' => $validacao->errors()];
+        }
+
         //$conteudo = Conteudo::create($data);
         $user->conteudos()->create($data);
 
-        return ['status' => true, 'conteudo' => $user->conteudos];
+        $conteudos = Conteudo::with('user')->orderBy('data_link','DESC')->paginate(5);
+        return ['status' => true, 'conteudos' => $conteudos];
+        
     }
 
     /**
