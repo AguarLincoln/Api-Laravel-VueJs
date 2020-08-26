@@ -13,9 +13,21 @@ class ConteudoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {   
+        $user = $request->user();
         $conteudos = Conteudo::with('user')->orderBy('data_link','DESC')->paginate(5);
+        foreach($conteudos as $conteudo){
+            $conteudo->total_curtidas = $conteudo->curtidas()->count();  
+            $curtiu = $user->curtidas()->find($conteudo->id);
+
+            if($curtiu){
+                $conteudo->curtiu_conteudo = true;
+            }else{
+                $conteudo->curtiu_conteudo = false;
+            }
+        }
+
         return ['status' => true, 'conteudos' => $conteudos];
     }
 
@@ -59,6 +71,20 @@ class ConteudoController extends Controller
         
     }
 
+    public function curtir(Request $request, $id){
+        $conteudo = Conteudo::find($id);
+
+        if($conteudo){
+            $user = $request->user();
+            $user->curtidas()->toggle($conteudo->id);
+
+            return ['status' => true, 'curtidas' => $conteudo->curtidas()->count(), 
+                        'lista' => $this->index($request)];
+        }else{
+            return ['status' => true, 'erro' => 'conteúdo não exite!'];
+        }
+        
+    }
     /**
      * Display the specified resource.
      *

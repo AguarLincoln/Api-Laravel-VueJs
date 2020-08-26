@@ -25,7 +25,7 @@ class Conteudo extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function curtidas(){
-    //     return $this->belongsToMany('App\user','curtidas', 'conteudo_id', 'user_id');
-    // }
+    public function curtidas(){
+        return $this->belongsToMany('App\user','curtidas', 'conteudo_id', 'user_id');
+    }
 }
