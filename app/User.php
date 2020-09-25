@@ -56,4 +56,9 @@ class User extends Authenticatable
     public function curtidas(){
         return $this->belongsToMany('App\Conteudo', 'curtidas', 'user_id', 'conteudo_id');
     }
+
+    public function comentarios()
+    {
+        return $this->hasMany('App\Comentario');
+    }
 }

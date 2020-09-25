@@ -86,6 +86,26 @@ class ConteudoController extends Controller
         }
         
     }
+
+    public function comentar($id,Request $request)
+    {
+      $conteudo = Conteudo::find($id);
+      if($conteudo){
+        $user = $request->user();
+        $user->comentarios()->create([
+          'conteudo_id'=>$conteudo->id,
+          'texto'=>$request->texto,
+          'data'=>date('Y-m-d H:i:s') //date('Y-m-d')
+        ]);
+        return [
+          'status'=>true,
+          'lista'=> $this->index($request)
+        ];
+      }else{
+        return ['status'=>false,"erro"=>"Conteúdo não existe!"];
+      }
+
+    }
     /**
      * Display the specified resource.
      *
