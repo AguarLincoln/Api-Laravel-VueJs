@@ -18,7 +18,8 @@ class ConteudoController extends Controller
         $user = $request->user();
         $conteudos = Conteudo::with('user')->orderBy('data_link','DESC')->paginate(5);
         foreach($conteudos as $conteudo){
-            $conteudo->total_curtidas = $conteudo->curtidas()->count();  
+            $conteudo->total_curtidas = $conteudo->curtidas()->count();
+            $conteudo->comentarios = $conteudo->comentarios()->with('user')->get();  
             $curtiu = $user->curtidas()->find($conteudo->id);
 
             if($curtiu){

@@ -28,4 +28,9 @@ class Conteudo extends Model
     public function curtidas(){
         return $this->belongsToMany('App\user','curtidas', 'conteudo_id', 'user_id');
     }
+
+    public function comentarios()
+    {
+        return $this->hasMany('App\Comentario');
+    }
 }
