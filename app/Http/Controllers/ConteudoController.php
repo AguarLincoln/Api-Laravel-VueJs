@@ -81,7 +81,7 @@ class ConteudoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['data_link'] = date('d/m/Y H:i:s');
+        $data['data_link'] = now();
         $user = $request->user();
         $data['user_id'] = $user->id;
 
