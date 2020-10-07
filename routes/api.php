@@ -25,6 +25,9 @@ Route::middleware('auth:api')->get('/conteudo', 'ConteudoController@index');
 Route::middleware('auth:api')->put('/conteudo/curtir/{id}', 'ConteudoController@curtir');
 Route::middleware('auth:api')->put('/conteudo/comentar/{id}', 'ConteudoController@comentar');
 Route::middleware('auth:api')->get('/conteudo/pagina/{id}', 'ConteudoController@pagina');
+Route::middleware('auth:api')->post('/usuario/amigo', 'UserController@amigo');
+Route::middleware('auth:api')->get('/usuario/amigo', 'UserController@listaAmigos');
+Route::middleware('auth:api')->get('/usuario/amigo/{id}', 'UserController@listaAmigosPagina');
 
 Route::get('/teste', function(){
     // $user = User::find(1);

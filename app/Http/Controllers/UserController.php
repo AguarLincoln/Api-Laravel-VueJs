@@ -61,6 +61,18 @@ class UserController extends Controller
         return ['status' => true, 'usuario' => $user];
     }
 
+    public function amigo(Request $request){
+        $user = $request->user();
+        
+        $amigo = User::find($request->id);
+        
+        if($amigo && ($user->id != $amigo->id)){
+            $user->amigos()->toggle($amigo->id);
+            return ['status' => true, 'amigos' => $user->amigos];
+        }
+
+        return ['status' => false, 'error' => 'usuario não existe'];
+    }
     /**
      * Display the specified resource.
      *
@@ -124,6 +136,27 @@ class UserController extends Controller
     
     }
 
+    public function listaAmigos(Request $request){
+        $user = $request->user();
+
+        if($user){
+            return ['status' => true, 'amigos' => $user->amigos];
+        }
+
+        return ['status' => false, 'error' => 'Usuario não existe'];
+        
+    }
+
+    public function listaAmigosPagina(Request $request, $id){
+        $user = User::find($id);
+        $userlogado = $request->user();
+        if($user){
+            return ['status' => true, 'amigos' => $user->amigos, 'amigosLogados' => $userlogado->amigos];
+        }
+
+        return ['status' => false, 'error' => 'Usuario não existe'];
+        
+    }
     /**
      * Remove the specified resource from storage.
      *
