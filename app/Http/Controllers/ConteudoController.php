@@ -17,7 +17,10 @@ class ConteudoController extends Controller
     public function index(Request $request)
     {   
         $user = $request->user();
-        $conteudos = Conteudo::with('user')->orderBy('data_link','DESC')->paginate(3);
+        $amigos = $user->amigos()->pluck('id');
+        $amigos->push($user->id);
+        $conteudos = Conteudo::WhereIn('user_id',$amigos)->with('user')->orderBy('data_link','DESC')->paginate(3);
+        
         foreach($conteudos as $conteudo){
             $conteudo->total_curtidas = $conteudo->curtidas()->count();
             $conteudo->comentarios = $conteudo->comentarios()->with('user')->get();  

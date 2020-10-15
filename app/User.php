@@ -52,6 +52,11 @@ class User extends Authenticatable
     {
       return $this->belongsToMany('App\User', 'amigos', 'user_id', 'amigo_id');
     }
+
+    public function seguidores()
+    {
+      return $this->belongsToMany('App\User', 'amigos', 'amigo_id', 'user_id');
+    }
     
     public function curtidas(){
         return $this->belongsToMany('App\Conteudo', 'curtidas', 'user_id', 'conteudo_id');
